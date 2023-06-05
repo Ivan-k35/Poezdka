@@ -1,3 +1,4 @@
+import os
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from zeep import Client
@@ -5,12 +6,15 @@ from zeep.helpers import serialize_object
 from requests import Session
 from requests.auth import HTTPBasicAuth
 from zeep.transports import Transport
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def get_directions(request):
     url = "http://dev.avibus.pro/UEEDev/ws/SchedulePort?wsdl"
-    username = "wsuser"
-    password = "sales"
+    username = os.getenv('USER_NAME')
+    password = os.getenv('PASSWORD')
 
     session = Session()
     session.auth = HTTPBasicAuth(username, password)
@@ -24,8 +28,8 @@ def get_directions(request):
 
 def get_destinations(request):
     url = "http://dev.avibus.pro/UEEDev/ws/SalePort?wsdl"
-    username = "wsuser"
-    password = "sales"
+    username = os.getenv('USER_NAME')
+    password = os.getenv('PASSWORD')
 
     session = Session()
     session.auth = HTTPBasicAuth(username, password)
@@ -59,8 +63,8 @@ def search_results(request):
 
     # Логика вызова API и обработки результатов поиска
     url = "http://dev.avibus.pro/UEEDev/ws/SalePort?wsdl"
-    username = "wsuser"
-    password = "sales"
+    username = os.getenv('USER_NAME')
+    password = os.getenv('PASSWORD')
 
     session = Session()
     session.auth = HTTPBasicAuth(username, password)

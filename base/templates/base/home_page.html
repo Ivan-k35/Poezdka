@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Поиск автобуса{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="mt-5">Поиск автобуса</h1>
+
+        <form id="search-form" action="{% url 'base:get_destinations' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="travel-direction">Направление поездки:</label>
+                <select id="travel-direction" class="form-control" name="travel_direction">
+                    <option disabled selected value="">Выберите направление</option>
+                    {% for direction in travel_directions %}
+                        <option value="{{ direction.id }}"
+                                data-name="{{ direction.name }}">{{ direction.name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" name="travel_direction_name" id="travel-direction-name" value="">
+            </div>
+            <!-- Другие поля формы -->
+            <button type="submit" class="btn btn-primary">Поиск</button>
+        </form>
+        <script>
+            // Получение элементов
+            const selectElement = document.getElementById('travel-direction');
+            const hiddenField = document.getElementById('travel-direction-name');
+
+            // Обработчик события изменения выбранного элемента
+            selectElement.addEventListener('change', function () {
+                const selectedOption = selectElement.options[selectElement.selectedIndex];
+                const dataName = selectedOption.dataset.name;
+                hiddenField.value = dataName;
+            });
+        </script>
+        <div id="results" class="mt-4"></div>
+    </div>
+{% endblock %}

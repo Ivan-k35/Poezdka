@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Поиск автобуса{% endblock %}
+
+
+
+{% block content %}
+    <div class="container">
+        <h1 class="mt-5">Выбор конечного направления</h1>
+
+        <p>Пункт отправления: {{ departure_name }}</p>
+
+        <form id="select-destination-form" action="{% url 'base:search_results' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="start_direction" value="{{ departure }}">
+
+            <div class="form-group">
+                <label for="end-direction">Конечное направление:</label>
+                <select id="end-direction" class="form-control" name="end_direction">
+                    <option disabled selected value="">Выберите конечное направление</option>
+                    {% for direction in end_directions %}
+                        <option value="{{ direction.id }}">{{ direction.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!-- Другие поля формы -->
+            <button type="submit" class="btn btn-primary">Найти</button>
+        </form>
+    </div>
+{% endblock %}
+

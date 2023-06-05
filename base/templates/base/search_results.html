@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="mt-5">Рейсы автобусов</h1>
+
+
+        <div class="flight-info">
+            <h2>{{ bus_results.Elements.RouteName }}</h2>
+            <p>Перевозчик: {{ bus_results.Elements.Carrier }}</p>
+            {% for bus in bus_results.Bus %}
+                <p>Автобус: {{ bus_results.Bus.Name }}</p>
+            {% endfor %}
+            <!-- Другая информация о рейсе -->
+
+            <h2>Пункт отправления</h2>
+            <p>Название: {{ bus.Departure.Name }}</p>
+            <p>Адрес: {{ bus.Departure.Address }}</p>
+            <!-- Другая информация о пункте отправления -->
+
+            <!-- Дополнительные детали о рейсе -->
+            <p>Частота: {{ bus.Frequency }}</p>
+            <p>Статус: {{ bus.Status }}</p>
+            <p>Статусная информация: {{ bus.StatusPrint }}</p>
+
+            <!-- Кнопки или ссылки для дополнительных действий -->
+        </div>
+
+    </div>
+{% endblock %}
+

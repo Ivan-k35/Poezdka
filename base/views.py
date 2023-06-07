@@ -17,6 +17,15 @@ PASSWORD = os.getenv('PASSWORD')
 
 
 def get_client(wsdl):
+    """
+      Возвращает клиент SOAP для взаимодействия с API.
+
+      Args:
+          wsdl (str): URL WSDL.
+
+      Returns:
+          zeep.Client: Клиент SOAP.
+      """
     session = Session()
     session.auth = HTTPBasicAuth(USERNAME, PASSWORD)
     client = Client(wsdl=wsdl, transport=Transport(session=session))
@@ -24,6 +33,15 @@ def get_client(wsdl):
 
 
 def get_directions(request):
+    """
+     Получает список доступных направлений из системы Avibus.
+
+     Args:
+         request (HttpRequest): Запрос Django.
+
+     Returns:
+         JsonResponse: JSON-ответ с направлениями.
+     """
     client = get_client(WSDL_SCHEDULE)
     bus_stops = client.service.GetBusStops()
     travel_directions = [{'id': td.Id, 'name': td.Name} for td in bus_stops if td.Automated]
@@ -31,6 +49,15 @@ def get_directions(request):
 
 
 def get_destinations(request):
+    """
+    Получает список пунктов назначения для выбранного направления из системы Avibus.
+
+    Args:
+        request (HttpRequest): Запрос Django.
+
+    Returns:
+        JsonResponse: JSON-ответ с пунктами назначения.
+    """
     client = get_client(WSDL_SALE)
     departure_id = '862fd93e-e633-11e7-80e7-00175d776a07'  # request.POST.get('travel_direction')
     destinations = client.service.GetDestinations(Departure=departure_id, Substring='')
@@ -41,6 +68,15 @@ def get_destinations(request):
 
 
 def search_trips(request):
+    """
+     Выполняет поиск поездок на основе выбранного направления и пункта назначения в системе Avibus.
+
+     Args:
+         request (HttpRequest): Запрос Django.
+
+     Returns:
+         JsonResponse: JSON-ответ с результатами поиска.
+     """
     departure = '862fd93e-e633-11e7-80e7-00175d776a07'  # request.POST.get('start_direction')
     destination = 'cb654d84-f487-11ed-83c7-d00da3a6c886'  # request.POST.get('end_direction')
     date = '2023-06-08'
@@ -53,9 +89,18 @@ def search_trips(request):
 
 
 def search_trip_segment(request):
+    """
+    Получает информацию о выбранной поездке и сегментах поездки из системы Avibus.
+
+    Args:
+        request (HttpRequest): Запрос Django.
+
+    Returns:
+        JsonResponse: JSON-ответ с информацией о поездке и сегментах.
+    """
     departure = 'cb654d84-f487-11ed-83c7-d00da3a6c886'
     destination = '862fd93e-e633-11e7-80e7-00175d776a07'
-    trip_id = '38871dbb-dffe-11e7-80e7-00175d776a078ef8b472-fcd3-11ed-0591-d00d5ddf9041'
+    trip_id = '38871dbb-dffe-11e7-80e7-00175d776a07b8fbbeda-fd9c-11ed-399e-d00d5ddf9041'
 
     client = get_client(WSDL_SALE)
     bus_results = client.service.GetTripSegment(TripId=trip_id, Departure=departure, Destination=destination)
@@ -65,9 +110,18 @@ def search_trip_segment(request):
 
 
 def get_occupied_seats(request):
+    """
+      Получает информацию о занятых и свободных местах на выбранной поездке в системе Avibus.
+
+      Args:
+          request (HttpRequest): Запрос Django.
+
+      Returns:
+          JsonResponse: JSON-ответ с информацией о местах.
+      """
     departure = 'cb654d84-f487-11ed-83c7-d00da3a6c886'
     destination = '862fd93e-e633-11e7-80e7-00175d776a07'
-    trip_id = '38871dbb-dffe-11e7-80e7-00175d776a07b9e9dbb0-fd9c-11ed-399e-d00d5ddf9041'
+    trip_id = '38871dbb-dffe-11e7-80e7-00175d776a07b8fbbeda-fd9c-11ed-399e-d00d5ddf9041'
     order_id = ''
 
     client = get_client(WSDL_SALE)
@@ -79,9 +133,18 @@ def get_occupied_seats(request):
 
 
 def start_sale_session(request):
+    """
+       Начинает сессию продажи билетов для выбранной поездки в системе Avibus.
+
+       Args:
+           request (HttpRequest): Запрос Django.
+
+       Returns:
+           JsonResponse: JSON-ответ с результатом начала сессии продажи.
+       """
     departure = 'cb654d84-f487-11ed-83c7-d00da3a6c886'
     destination = '862fd93e-e633-11e7-80e7-00175d776a07'
-    trip_id = '38871dbb-dffe-11e7-80e7-00175d776a078ef8b472-fcd3-11ed-0591-d00d5ddf9041'
+    trip_id = '38871dbb-dffe-11e7-80e7-00175d776a07b8fbbeda-fd9c-11ed-399e-d00d5ddf9041'
     order_id = ''
 
     client = get_client(WSDL_SALE)
@@ -93,6 +156,15 @@ def start_sale_session(request):
 
 
 def add_tickets(request):
+    """
+     Добавляет билеты в заказ для выбранной поездки в системе Avibus.
+
+     Args:
+         request (HttpRequest): Запрос Django.
+
+     Returns:
+         JsonResponse: JSON-ответ с результатом добавления билетов в заказ.
+     """
     order_id = '00000026685'
 
     ticket_seats = {
@@ -111,6 +183,15 @@ def add_tickets(request):
 
 
 def add_tickets_baggage(request):
+    """
+       Добавляет билеты для багажа в заказ для выбранной поездки в системе Avibus
+
+       Args:
+           request (HttpRequest): Запрос Django.
+
+       Returns:
+           JsonResponse: JSON-ответ с результатом добавления билетов для багажа в заказ.
+       """
     order_id = '00000026685'
 
     ticket_seats = {
@@ -129,6 +210,15 @@ def add_tickets_baggage(request):
 
 
 def del_tickets(request):
+    """
+     Удаляет билеты в заказ для выбранной поездки в системе Avibus.
+
+     Args:
+         request (HttpRequest): Запрос Django.
+
+     Returns:
+         JsonResponse: JSON-ответ с результатом удаления билетов из заказа.
+     """
     order_id = '00000026685'
 
     ticket_seats = {
@@ -147,8 +237,14 @@ def del_tickets(request):
 
 def change_fare_name(request):
     """
-    Смена тарифа
-    """
+        Смена тарифа для выбранной поездки в системе Avibus.
+
+        Args:
+            request (HttpRequest): Запрос Django.
+
+        Returns:
+            JsonResponse: JSON-ответ с результатом изменения тарифа в заказе.
+        """
     order_id = '00000026685'
 
     tickets = {
@@ -249,8 +345,14 @@ def change_fare_name(request):
 
 def set_ticket_data(request):
     """
-    Установка данных билета
-    """
+        Заполнение данных в билетах для выбранной поездки в системе Avibus.
+
+        Args:
+            request (HttpRequest): Запрос Django.
+
+        Returns:
+            JsonResponse: JSON-ответ с результатом добавления данных для поездки.
+        """
     order_id = '00000022788'
 
     tickets = {
@@ -303,8 +405,14 @@ def set_ticket_data(request):
 
 def reserve_order(request):
     """
-    Бронирование заказа для оплаты
-    """
+         Бронирование заказа для оплаты в системе Avibus.
+
+        Args:
+            request (HttpRequest): Запрос Django.
+
+        Returns:
+            JsonResponse: JSON-ответ с результатом бронирования заказа.
+        """
     order_id = '00000022788'
     customer = {'Email': 'example@mail.com'}
     reserve_kind = ''
@@ -319,8 +427,14 @@ def reserve_order(request):
 
 def make_payment(request):
     """
-    Оплата заказа
-    """
+        Оплата заказа для выбранной поездки в системе Avibus.
+
+        Args:
+            request (HttpRequest): Запрос Django.
+
+        Returns:
+            JsonResponse: JSON-ответ с результатом оплаты заказа.
+        """
     order_id = '00000022788'
     terminal_id = ''
     terminal_session_id = ''

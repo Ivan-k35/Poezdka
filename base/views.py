@@ -151,19 +151,15 @@ def start_sale_session(request):
 
 def add_tickets(request):
     # Получение параметров запроса из GET-параметров
-    order_id = '00000026682'
+    order_id = '00000026685'
 
-    ticket_seats = '''
-            <TicketSeats xmlns="http://www.unistation.ru/xdto"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TicketSeats">
-                <Elements>
-                    <FareName>Пассажирский</FareName>
-                    <SeatNum>0</SeatNum>
-                    <ParentTicketSeatNum>0</ParentTicketSeatNum>
-                </Elements>
-            </TicketSeats>
-            '''
+    ticket_seats = {
+        'Elements': {
+            'FareName': 'Багажный',
+            'SeatNum': '0',
+            'ParentTicketSeatNum': '0'
+        }
+    }
 
     # Логика вызова API и обработки результатов поиска
     url = "http://dev.avibus.pro/UEEDev/ws/SalePort?wsdl"
@@ -174,14 +170,9 @@ def add_tickets(request):
     session.auth = HTTPBasicAuth(username, password)
     client = Client(wsdl=url, transport=Transport(session=session))
 
-    ticket_seats_xml = ET.fromstring(ticket_seats)  # Преобразование строки в объект XML
-
-    # Создание корневого элемента TicketSeats и добавление в него элементов Elements
-    root = ET.Element('TicketSeats')
-    elements = ET.SubElement(root, 'Elements')
-    elements.append(ticket_seats_xml)
-
-    bus_results = client.service.AddTickets(OrderId=order_id, TicketSeats=ticket_seats_xml)
+    bus_results = client.service.AddTickets(OrderId=order_id, TicketSeats=ticket_seats)
     bus_results_ser = serialize_object(bus_results)
     print(bus_results)
     return JsonResponse(bus_results_ser)
+
+

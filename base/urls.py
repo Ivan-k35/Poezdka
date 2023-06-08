@@ -29,6 +29,8 @@ urlpatterns = [
          name='reserve_order'),
     path('make_payment/', views.make_payment,
          name='make_payment'),
+    path('cancel_payment/', views.cancel_payment,
+         name='cancel_payment'),
     path('create_return_order/', views.create_return_order,
          name='create_return_order'),
     path('add_ticket_return/', views.add_ticket_return,

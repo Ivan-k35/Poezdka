@@ -1,6 +1,5 @@
 import os
 from django.http import JsonResponse
-from django.shortcuts import render
 from zeep import Client
 from zeep.helpers import serialize_object
 from requests import Session
@@ -79,7 +78,7 @@ def search_trips(request):
      """
     departure = '862fd93e-e633-11e7-80e7-00175d776a07'  # request.POST.get('start_direction')
     destination = 'cb654d84-f487-11ed-83c7-d00da3a6c886'  # request.POST.get('end_direction')
-    date = '2023-06-08'
+    date = '2023-06-09'
 
     client = get_client(WSDL_SALE)
     bus_results = client.service.GetTrips(Departure=departure, Destination=destination, TripsDate=date)
@@ -98,9 +97,9 @@ def search_trip_segment(request):
     Returns:
         JsonResponse: JSON-ответ с информацией о поездке и сегментах.
     """
-    departure = 'cb654d84-f487-11ed-83c7-d00da3a6c886'
-    destination = '862fd93e-e633-11e7-80e7-00175d776a07'
-    trip_id = '38871dbb-dffe-11e7-80e7-00175d776a07b8fbbeda-fd9c-11ed-399e-d00d5ddf9041'
+    departure = '862fd93e-e633-11e7-80e7-00175d776a07'
+    destination = 'cb654d84-f487-11ed-83c7-d00da3a6c886'
+    trip_id = '38871dbb-dffe-11e7-80e7-00175d776a07e4f41fea-fe65-11ed-4382-d00d5ddf9041'
 
     client = get_client(WSDL_SALE)
     bus_results = client.service.GetTripSegment(TripId=trip_id, Departure=departure, Destination=destination)
@@ -119,9 +118,9 @@ def get_occupied_seats(request):
       Returns:
           JsonResponse: JSON-ответ с информацией о местах.
       """
-    departure = 'cb654d84-f487-11ed-83c7-d00da3a6c886'
-    destination = '862fd93e-e633-11e7-80e7-00175d776a07'
-    trip_id = '38871dbb-dffe-11e7-80e7-00175d776a07b8fbbeda-fd9c-11ed-399e-d00d5ddf9041'
+    departure = '862fd93e-e633-11e7-80e7-00175d776a07'
+    destination = 'cb654d84-f487-11ed-83c7-d00da3a6c886'
+    trip_id = '38871dbb-dffe-11e7-80e7-00175d776a07e4f41fea-fe65-11ed-4382-d00d5ddf9041'
     order_id = ''
 
     client = get_client(WSDL_SALE)
@@ -142,9 +141,9 @@ def start_sale_session(request):
        Returns:
            JsonResponse: JSON-ответ с результатом начала сессии продажи.
        """
-    departure = 'cb654d84-f487-11ed-83c7-d00da3a6c886'
-    destination = '862fd93e-e633-11e7-80e7-00175d776a07'
-    trip_id = '38871dbb-dffe-11e7-80e7-00175d776a07b8fbbeda-fd9c-11ed-399e-d00d5ddf9041'
+    departure = '862fd93e-e633-11e7-80e7-00175d776a07'
+    destination = 'cb654d84-f487-11ed-83c7-d00da3a6c886'
+    trip_id = '38871dbb-dffe-11e7-80e7-00175d776a07e4f41fea-fe65-11ed-4382-d00d5ddf9041'
     order_id = ''
 
     client = get_client(WSDL_SALE)
@@ -165,7 +164,7 @@ def add_tickets(request):
      Returns:
          JsonResponse: JSON-ответ с результатом добавления билетов в заказ.
      """
-    order_id = '00000026685'
+    order_id = '00000026703'
 
     ticket_seats = {
         'Elements': {
@@ -192,7 +191,7 @@ def add_tickets_baggage(request):
        Returns:
            JsonResponse: JSON-ответ с результатом добавления билетов для багажа в заказ.
        """
-    order_id = '00000026685'
+    order_id = '00000026703'
 
     ticket_seats = {
         'Elements': {
@@ -219,7 +218,7 @@ def del_tickets(request):
      Returns:
          JsonResponse: JSON-ответ с результатом удаления билетов из заказа.
      """
-    order_id = '00000026685'
+    order_id = '00000026703'
 
     ticket_seats = {
         'Elements': {
@@ -245,11 +244,11 @@ def change_fare_name(request):
         Returns:
             JsonResponse: JSON-ответ с результатом изменения тарифа в заказе.
         """
-    order_id = '00000026685'
+    order_id = '00000026703'
 
     tickets = {
         'Elements': {
-            'Number': '01000000072020',
+            'Number': '00000005334032',
             'SeatNum': '2',
             'FareName': 'Детский'
 
@@ -353,13 +352,13 @@ def set_ticket_data(request):
         Returns:
             JsonResponse: JSON-ответ с результатом добавления данных для поездки.
         """
-    order_id = '00000022788'
+    order_id = '00000026703'
 
     tickets = {
         'Elements': [
             {
-                'Number': '01000000072044',
-                'SeatNum': '10',
+                'Number': '00000005334018',
+                'SeatNum': '1',
                 'FareName': 'Пассажирский',
                 'PersonalData': [
                     {'Name': 'ФИО', 'Value': 'Дроздов Щегол Филинович'},
@@ -370,27 +369,27 @@ def set_ticket_data(request):
                 ]
             },
             {
-                'Number': '01000000072051',
-                'ParentTicketSeatNum': '10',
-                'SeatNum': '2',
+                'Number': '00000005334025',
+                'ParentTicketSeatNum': '1',
+                'SeatNum': '1',
                 'FareName': 'Багажный'
             },
             {
-                'Number': '01000000072013',
-                'SeatNum': '11',
+                'Number': '00000005334032',
+                'SeatNum': '2',
                 'FareName': 'Детский',
                 'PersonalData': [
                     {'Name': 'ФИО', 'Value': 'Дроздов Перепел Щеглович'},
                     {'Name': 'Удостоверение', 'Value': 'II-АБ 123456', 'ValueKind': 'Свидетельство о рождении'},
-                    {'Name': 'Дата рождения', 'Value': '2010-02-25T00:00:00'},
+                    {'Name': 'Дата рождения', 'Value': '2017-02-25T00:00:00'},
                     {'Name': 'Пол', 'Value': 'Мужской'},
                     {'Name': 'Гражданство', 'Value': 'РОССИЯ'},
                 ]
             },
             {
-                'Number': '01000000072051',
-                'ParentTicketSeatNum': '10',
-                'SeatNum': '2',
+                'Number': '00000005334025',
+                'ParentTicketSeatNum': '1',
+                'SeatNum': '1',
                 'FareName': 'Багажный'
             },
         ]
@@ -413,9 +412,9 @@ def reserve_order(request):
         Returns:
             JsonResponse: JSON-ответ с результатом бронирования заказа.
         """
-    order_id = '00000022788'
+    order_id = '00000026703'
     customer = {'Email': 'example@mail.com'}
-    reserve_kind = ''
+    reserve_kind = None
     cheque_settings = {'ChequeWidth': '48'}
     client = get_client(WSDL_SALE)
     bus_results = client.service.ReserveOrder(OrderId=order_id, Customer=customer,
@@ -435,13 +434,13 @@ def make_payment(request):
         Returns:
             JsonResponse: JSON-ответ с результатом оплаты заказа.
         """
-    order_id = '00000022788'
+    order_id = '00000026703'
     terminal_id = ''
     terminal_session_id = ''
     payment_items = {
         'Elements': {
             'PaymentType': 'PaymentCard',
-            'Amount': 'Amount'
+            'Amount': '900'
         }
     }
     cheque_settings = {'ChequeWidth': '48'}
@@ -450,6 +449,30 @@ def make_payment(request):
                                          TerminalSessionId=terminal_session_id,
                                          PaymentItems=payment_items,
                                          ChequeSettings=cheque_settings)
+    bus_results_ser = serialize_object(bus_results)
+
+    return JsonResponse(bus_results_ser)
+
+
+def cancel_payment(request):
+    """
+        Отмена оплата заказа для выбранной поездки в системе Avibus.
+        Метод используется для отмены оплаты в случае технических проблем.
+        Вызвать его можно только в течение 10 минут после вызова метода Payment.
+
+        Args:
+            request (HttpRequest): Запрос Django.
+
+        Returns:
+            JsonResponse: JSON-ответ с результатом отмены оплаты заказа.
+        """
+    order_id = '00000026703'
+    ticket_seats = ''
+    services = ''
+    payment_items = ''
+    client = get_client(WSDL_SALE)
+    bus_results = client.service.CancelPayment(OrderId=order_id, TicketSeats=ticket_seats,
+                                               Services=services, PaymentItems=payment_items)
     bus_results_ser = serialize_object(bus_results)
 
     return JsonResponse(bus_results_ser)
@@ -465,9 +488,9 @@ def create_return_order(request):
     Returns:
         JsonResponse: JSON-ответ с результатом создания заказа на возврат.
     """
-    ticket_number = '0100000000701'
-    seat_num = '0'
-    departure = 'ba40c9a8-a30f-11e5-9c4b-74d4354448bc'
+    ticket_number = '00000005334032'
+    seat_num = '2'
+    departure = '862fd93e-e633-11e7-80e7-00175d776a07'
     return_order_id = ''
 
     client = get_client(WSDL_SALE)
@@ -485,6 +508,7 @@ def create_return_order(request):
 def add_ticket_return(request):
     """
     Добавляет билет для возврата в заказ для выбранной поездки в системе Avibus.
+    Заказ на возврат актуален только в течение 30 минут.
 
     Args:
         request (HttpRequest): Запрос Django.
@@ -492,10 +516,10 @@ def add_ticket_return(request):
     Returns:
         JsonResponse: JSON-ответ с результатом добавления билета для возврата в заказ.
     """
-    return_order_id = '00000010663'
-    ticket_number = '01000000072013'
-    seat_num = '0'
-    departure = 'ba40c9a8-a30f-11e5-9c4b-74d4354448bc'
+    return_order_id = '00000011409'
+    ticket_number = '00000005334032'
+    seat_num = '2'
+    departure = '862fd93e-e633-11e7-80e7-00175d776a07'
 
     client = get_client(WSDL_SALE)
     bus_results = client.service.AddTicketReturn(TicketNumber=ticket_number,
@@ -517,8 +541,8 @@ def delete_ticket_return(request):
     Returns:
         JsonResponse: JSON-ответ с результатом удаления билета из возврата в заказе.
     """
-    return_order_id = '00000010663'
-    ticket_number = '01000000072013'
+    return_order_id = '00000011409'
+    ticket_number = '00000005334032'
 
     client = get_client(WSDL_SALE)
     bus_results = client.service.DelTicketReturn(ReturnOrderId=return_order_id,
@@ -538,21 +562,18 @@ def return_payment(request):
     Returns:
         JsonResponse: JSON-ответ с результатом возврата заказа.
     """
-    return_order_id = '00000010663'
+    return_order_id = '00000011409'
     terminal_id = ''
     terminal_session_id = ''
 
-    payment_items = """
-        <PaymentItems xmlns="http://www.unistation.ru/xdto" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="PaymentItems"/>
-    """
+    payment_items = {
+        'Elements': {
+            'PaymentType': 'PaymentCard',
+            'Amount': '475'
+        }
+    }
 
-    cheque_settings = """
-        <ChequeSettings xmlns="http://www.unistation.ru/xdto" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ChequeSettings">
-            <ChequeWidth>48</ChequeWidth>
-        </ChequeSettings>
-    """
+    cheque_settings = {'ChequeWidth': '48'}
 
     client = get_client(WSDL_SALE)
     bus_results = client.service.ReturnPayment(ReturnOrderId=return_order_id,
@@ -575,7 +596,7 @@ def cancel_return_payment(request):
     Returns:
         JsonResponse: JSON-ответ с результатом отмены возврата заказа.
     """
-    return_order_id = '00000010663'
+    return_order_id = '00000011409'
     ticket_seats = ''
     services = ''
     payment_items = ''
@@ -598,13 +619,13 @@ def get_ticket_status(request):
         JsonResponse: JSON-ответ с информацией о статусе билета.
     """
     departure_id = '862fd93e-e633-11e7-80e7-00175d776a07'
-    ticket_id = '01000000074024'
+    ticket_id = '00000005334018'
     vendor_id = ''
 
     client = get_client(WSDL_SALE)
     bus_results = client.service.GetTicketStatus(DepartureId=departure_id, TicketId=ticket_id, VendorId=vendor_id)
     bus_results_ser = serialize_object(bus_results)
-    return JsonResponse(bus_results_ser)
+    return JsonResponse(bus_results_ser, safe=False)
 
 # def get_directions(request):
 #     url = "http://dev.avibus.pro/UEEDev/ws/SchedulePort?wsdl"
